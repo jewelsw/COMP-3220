@@ -40,7 +40,6 @@ class Parser < Lexer
 			puts "Entering ASSGN Rule"
 			assign()
 		end
-		
 		puts "Exiting STMT Rule"
 	end
 
@@ -55,17 +54,40 @@ class Parser < Lexer
 
     #Parsing assignments
     def assign()
-
+		if (@lookahead.type == Token::ID)
+			id()
+			match(Token::ASSGN)
+			puts "Entering EXP Rule"
+			exp()
+		else
+			puts "Error in assign rule"
+		end
     end
 
     #'Parsing' identifiers
     def id()
+		puts "Found ID Token: #{@lookahead}"
         match(Token::ID)
     end
 
     #'Parsing' integers
     def int()
+		puts "Found INT Token: #{@lookahead}"
         match(Token::INT)
     end
-    
+
+	#Parsing additon and subtraction
+	def etail()
+		puts "Entering ETAIL Rule"
+		if (@lookahead.type == Token::ADDOP || @lookahead.type == Token::SUBOP)
+			addop()
+			puts "Entering EXP Rule"
+			exp()
+			puts "Entering ETAIL Rule"
+			etail()
+		else
+			puts "Exiting ETAIL Rule"
+		end
+
+
 end
