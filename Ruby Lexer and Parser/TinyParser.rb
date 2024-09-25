@@ -43,4 +43,29 @@ class Parser < Lexer
 		
 		puts "Exiting STMT Rule"
 	end
+
+    #Parsing expressions
+    def exp() 
+        if @lookAhead.type == Token::ID
+            id()
+        else @lookAhead.type == Token::INT
+            int()
+        end
+    end
+
+    #Parsing assignments
+    def assign()
+
+    end
+
+    #'Parsing' identifiers
+    def id()
+        match(Token::ID)
+    end
+
+    #'Parsing' integers
+    def int()
+        match(Token::INT)
+    end
+    
 end
