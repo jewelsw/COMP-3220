@@ -4,4 +4,4 @@ COMP 3220 aims to introduce the student to key constructs of programming languag
 
 ### Projects
 
-[Ruby Lexer and Parser]()
+[Ruby Lexer and Parser](https://github.com/jewelsw/COMP-3220/tree/main/Ruby%20Lexer%20and%20Parser)
