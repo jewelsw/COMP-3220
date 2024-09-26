@@ -45,15 +45,18 @@ class Parser < Lexer
 
     #Parsing expressions
     def exp() 
+		puts "Entering EXP Rule"
         if @lookAhead.type == Token::ID
             id()
         else @lookAhead.type == Token::INT
             int()
         end
+		puts "Exiting EXP Rule"
     end
 
     #Parsing assignments
     def assign()
+		puts "Entering ASSGN Rule"
 		if (@lookahead.type == Token::ID)
 			id()
 			match(Token::ASSGN)
@@ -62,18 +65,7 @@ class Parser < Lexer
 		else
 			puts "Error in assign rule"
 		end
-    end
-
-    #'Parsing' identifiers
-    def id()
-		puts "Found ID Token: #{@lookahead}"
-        match(Token::ID)
-    end
-
-    #'Parsing' integers
-    def int()
-		puts "Found INT Token: #{@lookahead}"
-        match(Token::INT)
+		puts "Exiting ASSGN Rule"
     end
 
 	#Parsing additon and subtraction
@@ -85,9 +77,48 @@ class Parser < Lexer
 			exp()
 			puts "Entering ETAIL Rule"
 			etail()
-		else
-			puts "Exiting ETAIL Rule"
 		end
+		puts "Exiting ETAIL Rule"
+	end
 
+	#Parsing multiplication and division
+	def ttail()
+		puts "Entering TTAIL Rule"
+		if (@lookahead.type == Token::MULOP || @lookahead.type == Token::DIVOP)
+			mulop()
+			puts "Entering EXP Rule"
+			exp()
+			puts "Entering TTAIL Rule"
+			ttail()
+		end
+		puts "Exiting TTAIL Rule"
+	end
+
+	#Parsing right and left parenthesis
+	def factor()
+		puts "Entering FACTOR Rule"
+		if (@lookahead.type == Token::LPAREN)
+			match(Token::LPAREN)
+			puts "Entering EXP Rule"
+			exp()
+			match(Token::RPAREN)
+		else
+			puts "Entering EXP Rule"
+			exp()
+		end
+		puts "Exiting FACTOR Rule"
+	end
+
+	#'Parsing' identifiers
+    def id()
+		puts "Found ID Token: #{@lookahead}"
+        match(Token::ID)
+    end
+
+    #'Parsing' integers
+    def int()
+		puts "Found INT Token: #{@lookahead}"
+        match(Token::INT)
+    end
 
 end
