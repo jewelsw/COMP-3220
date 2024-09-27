@@ -21,7 +21,6 @@ class Parser < Lexer
 	def match(dtype)
       	if (@lookahead.type != dtype)
          	puts "Expected #{dtype} found #{@lookahead.text}"
-			errorCount += 1
 		end
       	consume()
    	end
