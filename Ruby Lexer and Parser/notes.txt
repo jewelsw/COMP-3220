@@ -1,0 +1,15 @@
+return  = EPSILON
+
+DONE:
+    statement()
+    assign()
+    exp()
+    term()
+    factor()
+    etail()
+    ttail()
+    
+
+what to do with...
+    id() 
+        just call token class?

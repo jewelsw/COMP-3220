@@ -4,6 +4,8 @@
 load "TinyToken.rb"
 load "TinyLexer.rb"
 class Parser < Lexer
+	errorCount = 0
+
 	def initialize(filename)
     	super(filename)
     	consume()
@@ -19,7 +21,7 @@ class Parser < Lexer
 	def match(dtype)
       	if (@lookahead.type != dtype)
          	puts "Expected #{dtype} found #{@lookahead.text}"
-      	end
+		end
       	consume()
    	end
    	
@@ -43,82 +45,99 @@ class Parser < Lexer
 		puts "Exiting STMT Rule"
 	end
 
-    #Parsing expressions
-    def exp() 
-		puts "Entering EXP Rule"
-        if @lookAhead.type == Token::ID
-            id()
-        else @lookAhead.type == Token::INT
-            int()
-        end
-		puts "Exiting EXP Rule"
-    end
-
-    #Parsing assignments
+	#Parsing assignments
     def assign()
-		puts "Entering ASSGN Rule"
-		if (@lookahead.type == Token::ID)
+		if (@lookahead != nil)
 			id()
 			match(Token::ASSGN)
 			puts "Entering EXP Rule"
 			exp()
-		else
-			puts "Error in assign rule"
 		end
-		puts "Exiting ASSGN Rule"
     end
 
-	#Parsing additon and subtraction
-	def etail()
-		puts "Entering ETAIL Rule"
-		if (@lookahead.type == Token::ADDOP || @lookahead.type == Token::SUBOP)
-			addop()
-			puts "Entering EXP Rule"
-			exp()
+    #Parsing expressions
+    def exp() 
+		if (@lookahead != nil)
+			puts "Entering TERM Rule"
+        	term() 
 			puts "Entering ETAIL Rule"
 			etail()
 		end
-		puts "Exiting ETAIL Rule"
-	end
+		puts "Exiting EXP Rule"
+    end
 
-	#Parsing multiplication and division
-	def ttail()
-		puts "Entering TTAIL Rule"
-		if (@lookahead.type == Token::MULOP || @lookahead.type == Token::DIVOP)
-			mulop()
-			puts "Entering EXP Rule"
-			exp()
+	#Parsing terms
+	def term()
+		if (@lookahead != nil)
+			puts "Entering FACTOR Rule"
+			factor()
 			puts "Entering TTAIL Rule"
 			ttail()
 		end
-		puts "Exiting TTAIL Rule"
+		puts "Exiting TERM Rule"
 	end
 
 	#Parsing right and left parenthesis
 	def factor()
-		puts "Entering FACTOR Rule"
 		if (@lookahead.type == Token::LPAREN)
 			match(Token::LPAREN)
 			puts "Entering EXP Rule"
 			exp()
 			match(Token::RPAREN)
+		elsif
+			int()
 		else
-			puts "Entering EXP Rule"
-			exp()
+			id()
 		end
 		puts "Exiting FACTOR Rule"
 	end
 
+	#Parsing additon and subtraction
+	def etail()
+		if (@lookahead.type == Token::ADDOP)
+			match(Token::ADDOP)
+			puts "Entering TERM Rule"
+			term()
+			puts "Entering ETAIL Rule"
+			etail()
+		elsif (@lookahead.type == Token::SUBOP)
+			match(Token::SUBOP)
+			puts "Entering TERM Rule"
+			term()
+			puts "Entering ETAIL Rule"
+			etail()
+		else
+			return
+		end
+	end
+
+	#Parsing multiplication and division
+	def ttail()
+		if (@lookahead.type == Token::MULTOP)
+			match(Token::MULTOP)
+			puts "Entering FACTOR Rule"
+			factor()
+			puts "Entering TTAIL Rule"
+			ttail()
+		elsif (@lookahead.type == Token::DIVOP)
+			match(Token::DIVOP)
+			puts "Entering FACTOR Rule"
+			factor()
+			puts "Entering TTAIL Rule"
+			ttail()
+		else
+			return
+		end
+	end
+
 	#'Parsing' identifiers
     def id()
-		puts "Found ID Token: #{@lookahead}"
-        match(Token::ID)
+		
     end
 
     #'Parsing' integers
     def int()
-		puts "Found INT Token: #{@lookahead}"
-        match(Token::INT)
+		
     end
 
 end
