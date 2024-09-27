@@ -21,6 +21,8 @@ class Parser < Lexer
 	def match(dtype)
       	if (@lookahead.type != dtype)
          	puts "Expected #{dtype} found #{@lookahead.text}"
+		else
+			puts "Matched #{@lookahead.text}"
 		end
       	consume()
    	end
@@ -53,6 +55,7 @@ class Parser < Lexer
 			puts "Entering EXP Rule"
 			exp()
 		end
+		puts "Exiting ASSGN Rule"
     end
 
     #Parsing expressions
@@ -132,7 +135,7 @@ class Parser < Lexer
 
 	#'Parsing' identifiers
     def id()
-		puts "Found ID Token: #{@lookahead}"
+		#puts "Found ID Token: #{@lookahead}"
 		match(Token::ID)
     end
 
