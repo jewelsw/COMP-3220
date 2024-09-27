@@ -21,6 +21,7 @@ class Parser < Lexer
 	def match(dtype)
       	if (@lookahead.type != dtype)
          	puts "Expected #{dtype} found #{@lookahead.text}"
+			errorCount += 1
 		end
       	consume()
    	end
@@ -132,12 +133,15 @@ class Parser < Lexer
 
 	#'Parsing' identifiers
     def id()
-		
+		puts "Found ID Token: #{@lookahead}"
+		match(Token::ID)
     end
 
     #'Parsing' integers
     def int()
-		
+		puts "Found INT Token: #{@lookahead}"
+		match(Token::INT)
     end
 
+	puts "Errors found: #{errorCount}"
 end
